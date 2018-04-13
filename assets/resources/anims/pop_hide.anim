@@ -1,0 +1,64 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "pop-hide",
+  "_objFlags": 0,
+  "_rawFiles": null,
+  "_duration": 0.25,
+  "sample": 60,
+  "speed": 1,
+  "wrapMode": 1,
+  "curveData": {
+    "paths": {
+      "lay-wrap": {
+        "props": {
+          "y": [
+            {
+              "frame": 0,
+              "value": 30,
+              "curve": "cubicOut"
+            },
+            {
+              "frame": 0.25,
+              "value": -480
+            }
+          ],
+          "opacity": [
+            {
+              "frame": 0,
+              "value": 255,
+              "curve": "cubicOut"
+            },
+            {
+              "frame": 0.25,
+              "value": 0
+            }
+          ]
+        }
+      },
+      "lay-mask": {
+        "props": {
+          "opacity": [
+            {
+              "frame": 0,
+              "value": 128
+            },
+            {
+              "frame": 0.25,
+              "value": 0
+            }
+          ]
+        }
+      },
+      "lay-wrap/lay-btns": {
+        "props": {}
+      }
+    }
+  },
+  "events": [
+    {
+      "frame": 0.25,
+      "func": "_hideAnimF1",
+      "params": []
+    }
+  ]
+}

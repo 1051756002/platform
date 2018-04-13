@@ -1,0 +1,67 @@
+
+// 回馈结果
+// [服务端发送, 组合]
+message S_Result_Msg {
+	optional	int32	code = 1;		// 结果代码, 0:成功 >0:失败
+	optional	string	errmsg = 2;		// 异常信息
+}
+
+// 用户信息
+// [服务端发送, 组合]
+message S_User_Msg {
+	optional	int32	userid = 1;		// 用户ID
+	optional	string	nick = 2;		// 昵称
+	optional	string	headimg = 3;	// 头像
+	optional	int32	gender = 4;		// 性别, 1:男 0:女
+	optional	int32	age = 5;		// 年龄
+	optional	string	phone = 6;		// 手机号
+	optional	string	signature = 7;	// 个性签名
+}
+
+
+
+
+// 登录
+// Sub_CMD_C_Login
+// [客户端发送]
+message C_Login_Msg {
+	optional	string	username = 1;		// 用户名
+	optional	string	password = 2;		// 密码
+}
+
+// 登录
+// Sub_CMD_S_Login
+// [服务端发送]
+message S_Login_FbMsg {
+	optional	S_Result_Msg	result = 1;	// 回馈结果
+}
+
+// 用户秘钥验证
+// [客户端发送]
+message C_Validate_Msg {
+	optional	string	encrypstring = 1;	// 加密字符串
+	optional	string	encryptkey = 2;		// 加密的秘钥
+}
+
+// 用户秘钥验证回馈
+// [服务端发送]
+message S_Validate_FbMsg {
+	optional	S_Result_Msg	result = 1;	// 回馈结果
+	optional	S_User_Msg		user = 2;	// 用户信息
+}
+
+
+
+
+// Sub_CMD_C_Enter
+// [客户端发送]
+message C_Test_Msg {
+	optional	string	value = 1;	// 测试值
+}
+
+// Sub_CMD_S_Enter
+// [服务端发送]
+message S_Test_FbMsg {
+	optional	S_Result_Msg result = 1;	// 回馈结果
+	optional	string	value = 2;			// 测试值
+}

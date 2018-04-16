@@ -30,12 +30,13 @@ cc.Class({
 
     // 初始化函数
     onShow: function() {
-        window.a = this;
         if (!cc.sys.isNative) {
             return;
         }
 
-        util.tips('欢迎光临！222');
+        // util.log('欢迎光临！222');
+
+        // util.tips('欢迎光临！222');
 
         let writePath = (jsb.fileUtils ? jsb.fileUtils.getWritablePath() : '/') + 'platform-remote-asset';
 

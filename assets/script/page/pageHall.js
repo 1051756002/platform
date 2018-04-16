@@ -86,4 +86,8 @@ cc.Class({
             util.tips('文件不存在！');
         }
     },
+
+    onTouchGameList: function() {
+        ideal.ui.show('pageGame');
+    },
 });

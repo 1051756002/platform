@@ -4,6 +4,7 @@ cc.Class({
     properties: {
     	lblTitle: cc.Label,
     	lblContent: cc.Label,
+        btnCancel: cc.Button,
         scrollContent: cc.ScrollView,
     },
 
@@ -15,6 +16,8 @@ cc.Class({
 
         this.lblTitle.string = param.title;
         this.lblContent.string = param.content;
+
+        this.btnCancel.node.active = util.isDefine(param.cancelFn);
 
         // 内容超出时强制滑动到顶部
         if (this.scrollContent.content.height > this.scrollContent.node.height) {

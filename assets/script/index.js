@@ -5,7 +5,7 @@ cc.Class({
         ideal.init(function() {
             this.initPersist();
 
-            ideal.ui.show('pageEntry');
+            ideal.ui.show('pageUpdate');
         }.bind(this));
     },
 

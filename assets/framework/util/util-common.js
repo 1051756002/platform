@@ -83,4 +83,16 @@ _util.addUrlParam = function (url, name, value) {
     return url;
 };
 
+_util.loadRes = function(resources, progressFn, completeFn) {
+    if (!(resources instanceof Array)) {
+        resources = resources ? [resources] : [];
+    };
+
+    for (let i in resources) {
+        resources[i] = 'res/raw-assets/res/' + resources[i];
+    };
+
+    cc.loader.load(resources, progressFn, completeFn);
+};
+
 module.exports = _util;

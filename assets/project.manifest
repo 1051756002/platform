@@ -1,7 +1,7 @@
 {
-	"packageUrl": "http://192.168.0.29:5002/remote-assets/",
-	"remoteManifestUrl": "http://192.168.0.29:5002/remote-assets/project.manifest",
-	"remoteVersionUrl": "http://192.168.0.29:5002/remote-assets/version.manifest",
+	"packageUrl": "http://192.168.0.63:5002/remote-assets/",
+	"remoteManifestUrl": "http://192.168.0.63:5002/remote-assets/project.manifest",
+	"remoteVersionUrl": "http://192.168.0.63:5002/remote-assets/version.manifest",
 	"version": "1.0.0",
 	"assets": {
 		"src/jsb_polyfill.js": {
@@ -9,8 +9,8 @@
 			"md5": "e966311397dd40aaec77354fa22267cd"
 		},
 		"src/project.js": {
-			"size": 172090,
-			"md5": "94cd3e70ecad41150d36bd68665d2707"
+			"size": 172084,
+			"md5": "2383df38efb318e9c91b5a50c3ea44ad"
 		},
 		"src/settings.js": {
 			"size": 4409,
@@ -181,8 +181,8 @@
 			"md5": "142a95e540967bae870e4c54dfea2f29"
 		},
 		"res/raw-assets/project.manifest": {
-			"size": 6806,
-			"md5": "a7b9f0c2e42267fa238f339760a03afe"
+			"size": 9732,
+			"md5": "005c1f362affacec33d5bbfbf2601f53"
 		},
 		"res/raw-assets/resources/imgs/bg.png": {
 			"size": 546622,

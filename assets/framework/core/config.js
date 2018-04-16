@@ -62,7 +62,7 @@ config.protolist = [
 // 游戏场景页面
 config.scenes = {
     main: ['pageHall', 'pageHotUpdate'],
-    test: ['pageEntry', 'pageTest'],
+    test: ['pageEntry', 'pageTest', 'pageGame'],
 };
 
 module.exports = config;

@@ -59,10 +59,10 @@ config.protolist = [
 	'./proto/msg-socket',
 ];
 
-// 游戏场景页面
-config.scenes = {
-    main: ['pageHall', 'pageHotUpdate'],
-    test: ['pageEntry', 'pageTest', 'pageGame'],
+// 项目列表
+config.projects = {
+	'hall': 'hall_config',
+	'baoding': 'baoding_config',
 };
 
 module.exports = config;

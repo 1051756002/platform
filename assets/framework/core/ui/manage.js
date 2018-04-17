@@ -44,7 +44,19 @@ manage.hide = function(nodeName) {
  * @return   {void}
  */
 manage.refresh = function() {
+};
 
+/**
+ * 切换到指定项目
+ * @Author   Zjw
+ * @DateTime 2018-04-17
+ * @param    {string}                 projectName 项目名称
+ * @return   {void}
+ */
+manage.go = function(projectName) {
+    this.project.go(projectName);
+
+    util.log_sys('当前项目: {0}', projectName);
 };
 
 
@@ -148,10 +160,11 @@ manage.page = {
      * @return {string}  场景名
      */
     getSceneName: function(pageName) {
-        for (var i in ideal.config.scenes) {
-            for (var j in ideal.config.scenes[i]) {
-                if (ideal.config.scenes[i][j] == pageName) {
-                    return i;
+        let project = manage.project.ACTIVE_PROJECT;
+        for (var i in project.scenes) {
+            for (var j in project.scenes[i]) {
+                if (project.scenes[i][j] == pageName) {
+                    return project.name + '_' + i;
                 }
             }
         }
@@ -176,7 +189,7 @@ manage.page = {
      * @param  pageName  页面名
      * @param  param     参数
      */
-    show: function(pageName, param, silent) {
+    show: function(pageName, param) {
         if (!this.localShow(pageName, param)) {
             // 加载页面所在场景
             var sceneName = this.getSceneName(pageName);
@@ -198,7 +211,60 @@ manage.page = {
     }
 };
 
+manage.project = {
+    // 当前运作的项目
+    ACTIVE_PROJECT: null,
 
+    closeProject: function(config) {
+        // 移除util模块
+        let u_main = config.name + '_util_main';
+        if (util.isDefine(u_main)) {
+            for (let i in u_main) {
+                delete util[i];
+            };
+        }
+    },
+
+    openProject: function(config) {
+        // 载入util模块
+        let u_main = require(config.name + '_util_main');
+        if (util.isDefine(u_main)) {
+            for (let i in u_main) {
+                if (util[i] == undefined) {
+                    util[i] = u_main[i];
+                } else {
+                    util.log_sys('%-#f00', 'util.{0} registration failed, already existed.', i);
+                }
+            };
+        }
+
+        // 载入ui模块
+        manage.show(config.launchPage);
+    },
+
+    go: function(projectName, param) {
+        // 关闭当前打开的项目
+        if (this.ACTIVE_PROJECT) {
+            if (projectName == this.ACTIVE_PROJECT.name) {
+                return;
+            }
+            this.closeProject(this.ACTIVE_PROJECT);
+        }
+
+        let project = ideal.config.projects[projectName];
+
+        if (util.isDefine(project)) {
+            let projectConfig = require(project);
+            this.ACTIVE_PROJECT = projectConfig;
+            this.openProject(projectConfig);
+        } else {
+            util.log_sys('%-#f00', 'framework/core/ui/manage.js Error: no project was found "{0}"', projectName);
+        }
+    },
+};
+
+
+module.exports.go = manage.go.bind(manage);
 module.exports.show = manage.show.bind(manage);
 module.exports.hide = manage.hide.bind(manage);
 module.exports.refresh = manage.refresh.bind(manage);

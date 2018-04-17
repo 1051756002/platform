@@ -6,6 +6,7 @@ ideal.ui = require('./ui/manage');
 ideal.pb = require('../pb/pb');
 ideal.conn = require('../network/connector');
 ideal.http = require('../network/http');
+ideal.sound = require('./sound');
 
 window.ideal = ideal;
 window.util = ideal.util;
@@ -32,6 +33,9 @@ ideal.init = function(callback) {
 		util.log('%-#0fe029', 'ideal framework initialization end.');
 		util.isDefine(callback) && callback();
 	};
+
+	callback2();
+	return;
 
 	// 纯净化控制平台日志
 	if (ideal.config.pureLog) {
@@ -68,3 +72,16 @@ let initComplete = function(callback) {
 	util.log_sys('%-#0fe029', 'DebugModel: {0}\n', ideal.config.debug);
 	util.isDefine(callback) && callback();
 };
+
+cc.Class({
+    extends: cc.Component,
+
+    properties: {
+    },
+
+    onLoad: function() {
+    	ideal.init(function() {
+    		ideal.ui.go('hall');
+    	});
+    },
+});

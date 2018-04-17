@@ -1,0 +1,30 @@
+{
+  "ver": "1.0.0",
+  "uuid": "df03dc07-72d0-4bfc-b5d4-41948776ae43",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "subMetas": {
+    "hall_btn_shop_touch": {
+      "ver": "1.0.3",
+      "uuid": "8afe9701-f93c-4fb6-8bd3-bbcc46ae8f41",
+      "rawTextureUuid": "df03dc07-72d0-4bfc-b5d4-41948776ae43",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": 0,
+      "offsetY": 0,
+      "trimX": 0,
+      "trimY": 0,
+      "width": 60,
+      "height": 53,
+      "rawWidth": 60,
+      "rawHeight": 53,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}

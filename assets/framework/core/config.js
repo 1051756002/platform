@@ -15,54 +15,26 @@ config.pureLog = false;
 // 客户端版本号
 config.version = '0.0.1';
 
-// 服务器配置
-config.server = [
-	// 登录服务器
-	{
-		// 地址
-		address: '192.168.199.233',
-		// 端口
-		port: 3000,
-	},
-	// 游戏业务服务器
-	{
-		// 地址
-		address: '127.0.0.1',
-		// 端口
-		port: 9411,
-		// 重连次数上限
-		reconnLimit: 5,
-	}
-];
+// 客户端设计尺寸
+config.designWidth = 1136;
+config.designHeight = 640;
 
-
-// HTTP请求服务器
-config.httpServer = 'http://121.196.204.236/website_jinzhong/http_api/api.php';
-config.httpServer = 'http://192.168.0.29:3000/login';
-
-
-
-// 是否启用Protobuf
-config.enableProtobuf = true;
-
-// 是否启用Socket
-config.enableSocket = false;
-
-// 不打印日志的接收命令
-config.notlog_recv = [0];
-
-// 不打印日志的接收命令
-config.notlog_send = [0];
-
-// proto文件列表
-config.protolist = [
-	'./proto/msg-socket',
-];
+// 微信分享标题
+config.wxShareTitle = 'ideal-framework';
+// 微信分享图标
+config.wxShareIcon = 'http://gametest.xingdong.co/songyuan_h5/res/raw-assets/icon.b068d.png',
 
 // 项目列表
 config.projects = {
 	'hall': 'hall_config',
-	'baoding': 'baoding_config',
+	'example': 'example_config',
+	// 'baoding': 'baoding_config',
+	// 'songyuan': 'songyuan_config',
 };
+
+// 依赖脚本列表
+config.scriptlist = [
+	'http://res.wx.qq.com/open/js/jweixin-1.1.0.js',
+];
 
 module.exports = config;

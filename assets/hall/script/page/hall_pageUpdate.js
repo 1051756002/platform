@@ -48,7 +48,29 @@ cc.Class({
 
         this.lblVersion.string = 'Version: ' + ideal.config.version;
 
-        window.kk = this;
+        // 登录, user_type 1=游客
+        ideal.http.get({
+            action: 'Hall_Login',
+            param: JSON.stringify({
+                udid: 'test-gb-udid4',
+                user_type: 1,
+            }),
+        });
+
+        // 登录, user_type 2=微信
+        ideal.http.get({
+            action: 'Hall_Login',
+            param: JSON.stringify({
+                udid: 'test-gb-udid3',
+                user_type: 2,
+                wx_id: 'adfasdfasdfasdfakl',
+                nick_name: 'guobin',
+                sex: 1,
+                avater_url: 'www.baidu.com',
+            }),
+        });
+
+        this.initWechat();
     },
 
     initUI: function() {
@@ -103,7 +125,7 @@ cc.Class({
 
     startHotUpdate: function() {
         try {
-            ideal.ui.hide('popTips');
+            ideal.view.hide('popTips');
 
             cc.eventManager.removeListener(this.checkListener);
             this.checkListener = null;
@@ -193,7 +215,7 @@ cc.Class({
                 break;
             // 更新完成
             case EAM.UPDATE_FINISHED:
-                util.tips('热更新提示', '更新完成, 即将重启！', function() {
+                util.tips('更新完成, 即将重启！', function() {
                     cc.eventManager.removeListener(this.updateListener);
                     this.updateListener = null;
 
@@ -235,7 +257,106 @@ cc.Class({
         this.progressUpdate.progress = 1;
         this.lblPanel.string = '即将进入游戏';
         this.node.runAction(cc.sequence(cc.delayTime(1), cc.fadeOut(0.5), cc.callFunc(function() {
-            ideal.ui.show('pageEntry');
+            ideal.view.show('pageHall');
         })));
+    },
+
+    initWechat: function() {
+        if (wx.isActive) {
+            return;
+        }
+
+        wx.config({
+            debug: false,
+            appId: 'wx263f28e53ce2de76',
+            timestamp: 1524210712,
+            nonceStr: 'HYvOjTv9S0vV8NEZ',
+            signature: '304985b54fa3ebd7a3ca7faba6bb3afe4a5a62f5',
+            jsApiList: [
+                'checkJsApi',
+                'onMenuShareTimeline',
+                'onMenuShareAppMessage',
+                'onMenuShareQQ',
+                'onMenuShareWeibo',
+                'hideMenuItems',
+                'showMenuItems',
+                'hideAllNonBaseMenuItem',
+                'showAllNonBaseMenuItem',
+                'translateVoice',
+                'startRecord',
+                'stopRecord',
+                'onRecordEnd',
+                'playVoice',
+                'pauseVoice',
+                'stopVoice',
+                'uploadVoice',
+                'downloadVoice',
+                'chooseImage',
+                'openAddress',
+                'previewImage',
+                'uploadImage',
+                'downloadImage',
+                'getNetworkType',
+                'openLocation',
+                'getLocation',
+                'hideOptionMenu',
+                'showOptionMenu',
+                'closeWindow',
+                'scanQRCode',
+                'chooseWXPay',
+                'openProductSpecificView',
+                'addCard',
+                'chooseCard',
+                'openCard',
+            ],
+        });
+
+        wx.ready(function() {
+            // util.tips('执行了wx.ready回调');
+            wx.isActive = true;
+
+            wx.onMenuShareTimeline({
+                title: ideal.config.wxShareTitle, // 分享标题
+                link: location.href, // 分享链接
+                imgUrl: ideal.config.wxShareIcon, // 分享图标
+                success: function() {
+                    util.tips('wx.onMenuShareTimeline');
+                    // 用户确认分享后执行的回调函数
+                },
+                cancel: function() {
+                    // 用户取消分享后执行的回调函数
+                }
+            });
+
+            wx.getLocation({
+                type: 'wgs84', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
+                success: function(res) {
+                    var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
+                    var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
+                    var speed = res.speed; // 速度，以米/每秒计
+                    var accuracy = res.accuracy; // 位置精度
+
+                    // util.tips(JSON.stringify(res));
+                    util.tips('定位了');
+                }
+            });
+
+
+            let wxUrl = 'https://open.weixin.qq.com/connect/oauth2/authorize';
+            wxUrl += '?appid=wx263f28e53ce2de76';
+            wxUrl += '&redirect_uri=' + location.href;
+            wxUrl += '&response_type=code';
+            wxUrl += '&scope=snsapi_userinfo';
+            wxUrl += '&state=STATE';
+            wxUrl += '&connect_redirect=1';
+
+            cc.sys.openURL(wxUrl);
+
+            // cc.sys.openURL('http://jifen.xingdong.co/xingdongwebpay/h5Game/getWeixinInfo.php?back=songyuan_h5');
+        });
+
+        wx.error(function(res){
+            util.tips(JSON.stringify(res));
+        });
     },
 });

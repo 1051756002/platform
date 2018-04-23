@@ -8,10 +8,12 @@ let _util = {};
  * @return   {object}
  */
 _util.clone = function(obj) {
-	var str, newobj = obj.constructor === Array ? [] : {};
-	if (typeof obj !== 'object') {
+	if (obj === null || typeof obj !== 'object') {
 		return;
-	} else if (window.JSON) {
+	}
+
+	var str, newobj = obj.constructor === Array ? [] : {};
+	if (window.JSON) {
 		str = JSON.stringify(obj), newobj = JSON.parse(str);
 	} else {
 		for (var i in obj) {

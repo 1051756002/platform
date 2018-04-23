@@ -2,102 +2,123 @@ cc.Class({
     extends: require('basePage'),
 
     properties: {
-        bgmp3: cc.AudioClip,
+    	editSearch: cc.EditBox,
+    	layGroupContent: cc.Node,
+    	layGameContent: cc.Node,
+
+    	prefabItemGame: cc.Prefab,
+    	prefabItemGroupHistory: cc.Prefab,
+    	prefabItemGroupHot: cc.Prefab,
+    	prefabItemGroupRegion: cc.Prefab,
+    	prefabItemGroupNormal: cc.Prefab,
     },
 
     onShow: function(param) {
-        util.log('wecome hall.');
+        ideal.http.get({
+        	action: 'Hall_AllGameList',
+        	param: '[]',
+        }, this.loadGroupList.bind(this));
     },
 
-    onTouchGoEntry: function() {
-        ideal.ui.show('pageEntry');
+    onHide: function() {
+    	delete this.data;
     },
 
-    onTouchGoTest: function() {
-        ideal.ui.show('pageTest');
-    },
+    loadGroupList: function(data) {
+        // 推荐列表
+        let hotList = [];
+        // 定位列表
+        let region = null;
+        // 地区列表
+        let areaList = [];
 
-    onTouchMD5: function() {
-        let val = 'ideal';
-        let msg = util.format('加密前: {0}\n加密后: {1}', val, util.md5(val));
-        util.tips('MD5加密', msg);
-    },
+        this.data = data;
 
-    onTouchLoading: function() {
-        ideal.ui.show('fixLoading');
+        // 筛选出省份
+        data.area_list.forEach(function(area) {
+        	if (area.parents_id == 0) {
+        		if (!region) {
+        			region = area;
+        		} else {
+        			areaList.push(area);
+        		}
+        	}
+        });
 
-        this.scheduleOnce(function() {
-            ideal.ui.hide('fixLoading');
-        }, 3);
-    },
+        // 清空节点列表
+        this.layGroupContent.removeAllChildren();
+        let toggleGroup = this.layGroupContent.getComponent(cc.ToggleGroup);
 
-    onTouchLongTips: function() {
-        util.tips('超长文本提示', '在 Cocos Creator 中，我们为组件提供了方便的计时器，这个计时器源自于 Cocos2d-x 中的 cc.Scheduler，我们将它保留在了 Cocos Creator 中并适配了基于组件的使用方式。\n\n也许有人会认为 setTimeout 和 setInterval 就足够了，开发者当然可以使用这两个函数，不过我们更推荐使用计时器，因为它更加强大灵活，和组件也结合得更好！');
-    },
+        // 定位列表
+        if (region) {
+    		let item = cc.instantiate(this.prefabItemGroupRegion);
+    		let comp = item.getComponent('hall_itemGroup');
+    		comp.initRegionStyle(region);
+    		comp.radioGroup.toggleGroup = toggleGroup;
+    		this.layGroupContent.addChild(item);
 
-    onTouchMahjong2: function() {
-        cc.director.loadScene('mahjong_2');
-    },
-
-    onTouchGoHotUpdate: function() {
-        ideal.ui.show('pageHotUpdate');
-    },
-
-    onTouchRestart: function() {
-        cc.audioEngine.stopAll();
-        cc.game.restart();
-    },
-
-    onTouchWriteFile: function() {
-        if (!cc.sys.isNative) {
-            util.tips('该系统不支持文件写入！');
-            return;
+	        let checkEventHandler = new cc.Component.EventHandler();
+			checkEventHandler.target = this.node;
+			checkEventHandler.component = 'hall_pageHall';
+			checkEventHandler.handler = 'loadGameList';
+			checkEventHandler.customEventData = region.id;
+			comp.radioGroup.checkEvents.push(checkEventHandler);
         }
 
-        let obj = {
-            nick: 'ideal',
-            pwd: 'superman',
+        // 地区列表
+        for (let i in areaList) {
+    		let item = cc.instantiate(this.prefabItemGroupNormal);
+    		let comp = item.getComponent('hall_itemGroup');
+    		comp.initNormalStyle(areaList[i]);
+    		comp.radioGroup.toggleGroup = toggleGroup;
+    		this.layGroupContent.addChild(item);
+
+	        let checkEventHandler = new cc.Component.EventHandler();
+			checkEventHandler.target = this.node;
+			checkEventHandler.component = 'hall_pageHall';
+			checkEventHandler.handler = 'loadGameList';
+			checkEventHandler.customEventData = areaList[i].id;
+			comp.radioGroup.checkEvents.push(checkEventHandler);
         };
 
-        let writeContent = JSON.stringify(obj);
-        let writePath = jsb.fileUtils.getWritablePath() + 'test.json';
+        // 默认选中第一个
+        toggleGroup.toggleItems[0].check();
+    },
 
-        if (jsb.fileUtils.writeStringToFile(writeContent, writePath)) {
-            util.log('写入成功！');
-            util.tips('写入成功！');
-        } else {
-            util.log('写入失败！');
-            util.tips('写入失败！');
+    loadGameList: function(ev, groupid) {
+    	// 游戏列表
+        let gameList = [];
+
+        // 筛选出游戏
+        this.data.game_list.forEach(function(game) {
+        	if (game.province_id == groupid) {
+        		gameList.push({ id: game.id, name: game.name });
+        	}
+        });
+
+        // 清空节点列表
+        this.layGameContent.removeAllChildren();
+
+        // 游戏列表
+        for (let i in gameList) {
+        	let item = cc.instantiate(this.prefabItemGame);
+        	let comp = item.getComponent('hall_itemGame');
+        	comp.initStyle(gameList[i]);
+        	this.layGameContent.addChild(item);
         }
     },
 
-    onTouchLoadFile: function() {
-        if (!cc.sys.isNative) {
-            util.tips('该系统不支持文件写入！');
-            return;
-        }
-        
-        let writePath = jsb.fileUtils.getWritablePath() + 'test.json';
+    onTouchSearch: function() {
+    	let content = util.trim(this.editSearch.string);
+    	if (content.length == 0) {
+    		util.tips('请输入搜索内容', function() {
+    			this.editSearch.string = '';
+    		}.bind(this));
+    		return;
+    	}
 
-        if (jsb.fileUtils.isFileExist(writePath)) {
-            util.log('文件存在！');
-            util.tips('文件存在！');
-        } else {
-            util.log('文件不存在！');
-            util.tips('文件不存在！');
-        }
-    },
-
-    onTouchGameList: function() {
-        ideal.ui.show('pageGame');
-    },
-
-    onTouchSound: function() {
-        ideal.ui.show('popSound');
-    },
-
-    onTouchSound2: function() {
-        util.log_sys('bgmp3: {0}', this.bgmp3);
-        cc.audioEngine.play(this.bgmp3);
+        ideal.view.show('popSearch', {
+            gameList: this.data.game_list.slice(0, util.rnd(1, 10)),
+        });
     },
 });

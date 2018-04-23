@@ -19,7 +19,6 @@ http.send = function(cfg) {
 				if (util.isDefine(cfg.successFn)) {
 					cfg.successFn(resp.data);
 				}
-				util.log_net(resp.data);
 			}
 			// 业务处理, 失败
 			else {
@@ -60,8 +59,9 @@ http.send = function(cfg) {
  * @return   {void}
  */
 http.get = function(data, successFn, failyFn) {
+	let config = ideal.project.get();
 	let cfg = {
-		path: ideal.config.httpServer,
+		path: config.httpServer,
 		method: 'GET',
 		data: {},
 		successFn: successFn,
@@ -85,8 +85,9 @@ http.get = function(data, successFn, failyFn) {
  * @return   {void}
  */
 http.post = function(data, successFn, failyFn) {
+	let config = ideal.project.get();
 	let cfg = {
-		path: ideal.config.httpServer,
+		path: config.httpServer,
 		method: 'POST',
 		data: data,
 		successFn: successFn,

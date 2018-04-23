@@ -9,7 +9,7 @@ let sendTime = 0;
 heartbeat.start = function() {
 	this.next();
 
-	ideal.conn.on('beat', this.beat, this);
+	ideal.net.on('beat', this.beat, this);
 };
 
 heartbeat.beat = function() {
@@ -25,11 +25,11 @@ heartbeat.next = function() {
 
 	if ((currTime - lastTime) > 5000 || (currTime - sendTime) > 5000) {
 		sendTime = undefined;
-		ideal.conn.interrupt();
+		ideal.net.interrupt();
 		return;
 	}
 
-	ideal.conn.send('beat');
+	ideal.net.send('beat');
 	sendTime = currTime;
 
 	stid_beat = setTimeout(this.next.bind(this), 1000);
@@ -37,7 +37,7 @@ heartbeat.next = function() {
 
 heartbeat.stop = function() {
 	clearTimeout(stid_beat);
-	ideal.conn.off('beat');
+	ideal.net.off('beat');
 };
 
 module.exports = heartbeat;

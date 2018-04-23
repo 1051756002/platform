@@ -27,7 +27,14 @@ sound.remove = function(soundName) {
 		return false;
 	}
 
+	cc.audioEngine.uncache(this._sources.path);
 	delete this._sources[soundName];
+	return true;
+};
+
+sound.removeAll = function() {
+	cc.audioEngine.uncacheAll();
+	this._sources = {};
 	return true;
 };
 
